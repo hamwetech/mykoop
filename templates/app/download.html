@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #CD7F32, #A52A2A);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-card {
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .app-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            background: #A52A2A;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+
+        .btn-download {
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 12px;
+        }
+
+        .notes {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="download-card">
+
+    <!-- App Icon -->
+    <div class="app-icon">
+        <i class="bi bi-android2"></i>
+    </div>
+
+    <!-- App Name -->
+    <h3 class="mb-2">My Android App</h3>
+    <p class="text-muted">Secure • Fast • Reliable</p>
+
+    <!-- Version Info -->
+    <div class="mb-3">
+        <span class="badge bg-primary">
+            Version {{ app.version_name }}
+        </span>
+        <span class="badge bg-secondary">
+            Code {{ app.version_code }}
+        </span>
+    </div>
+
+    <!-- Download Button -->
+    <a href="{{ app.apk_file.url }}" class="btn btn-success btn-download w-100 mb-3">
+        <i class="bi bi-download"></i> Download APK
+    </a>
+
+    <!-- Force Update Notice -->
+    {% if app.force_update %}
+    <div class="alert alert-warning mt-2">
+        This update is required to continue using the app.
+    </div>
+    {% endif %}
+
+    <!-- Release Notes -->
+    {% if app.release_notes %}
+    <div class="notes">
+        <strong>What's New:</strong>
+        <ul>
+            {% for line in app.release_notes.splitlines %}
+                <li>{{ line }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

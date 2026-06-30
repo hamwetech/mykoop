@@ -1,0 +1,114 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}
+    {% if subtitle %}
+        {{ subtitle }} |
+    {% endif %}
+    {{ title }} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
+
+{% block branding %}
+{% endblock %}
+{% block breadcrumbs %}
+<div class="row mb-3">
+
+    <!-- LEFT: TITLE + BREADCRUMB -->
+    <div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+
+        <h1 class="h4 m-0 pr-3 mr-3 border-right">
+            Loan Detail
+        </h1>
+
+        <ol class="breadcrumb mb-0 bg-transparent p-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'admin:index' %}">Home</a>
+            </li>
+
+            <li class="breadcrumb-item">
+                <a href="">
+                    {{ opts.app_config.verbose_name }}
+                </a>
+            </li>
+
+            <li class="breadcrumb-item">
+                <a href="{% url 'admin:finance_loan_changelist' %}">
+                    Loans
+                </a>
+            </li>
+
+            <li class="breadcrumb-item active">
+                {{ loan.farmer }}
+            </li>
+        </ol>
+
+    </div>
+
+    <!-- RIGHT: ACTION BUTTONS -->
+    <div class="col-12 col-md-auto d-flex align-items-center justify-content-end page-actions">
+
+        <a href="{% url 'admin:finance_loan_changelist' %}" class="btn btn-secondary">
+            Back
+        </a>
+
+        <a href="{% url 'admin:finance_loan_change' loan.id %}" class="btn btn-primary ml-2">
+            Edit Loan
+        </a>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block content %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body table-responsive">
+
+                    <!-- LOAN SUMMARY -->
+                    <div class="col-12">
+                        <h4>{{ loan.farmer }}</h4>
+                        <p><b>Status:</b> {{ loan.status }}</p>
+                        <p><b>Amount:</b> {{ loan.amount }}</p>
+                        <p><b>Interest Rate:</b> {{ loan.interest_rate }}%</p>
+                        <p><b>Total With Interest:</b> {{ loan_total }}</p>
+                        <p><b>Total Repaid:</b> {{ total_repaid }}</p>
+                        <p><b>Balance:</b> <span class="text-danger">{{ balance }}</span></p>
+                    </div>
+
+                    <!-- REPAYMENTS -->
+                    <div class="ccol-lg-3 col-6">
+                        <h4>Repayments</h4>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for r in repayments %}
+                                <tr>
+                                    <td>{{ r.payment_date }}</td>
+                                    <td>{{ r.principal_paid }}</td>
+                                    <td>{{ r.interest_paid }}</td>
+                                    <td>{{ r.total_paid }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No repayments yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,345 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}
+    {% if subtitle %}
+        {{ subtitle }} |
+    {% endif %}
+    {{ title }} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
+
+{% block branding %}
+{% endblock %}
+
+{% block content %}
+
+<div class="col-12">
+    <div class="row">
+        <!-- Total Farmers -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>{{ total_farmers }}</h3>
+                    <p>Total Farmers</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a href="{% url 'admin:system_farmer_changelist' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+
+        <!-- Total Inspections -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>{{ total_male }}</h3>
+                    <p>Total Male</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-clipboard"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Inspected Farmers -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>{{ total_female }}</h3>
+                    <p>Total Female</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Inspected Farmers -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>{{ total_vsla }}</h3>
+                    <p>Total VSLA</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- All Shares -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>{{ total_shares }}</h3>
+                    <p>Shares</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-stalker"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- All Savings -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>{{ total_savings }}</h3>
+                    <p>Savings</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-stalker"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- All Savings -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>{{ pending_summary.total_amount|default:"0" }}</h3>
+                    <p>Pending Loan Requests {{ pending_summary.total_count}}</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-stalker"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- All Savings -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>{{ loan_requests.total_amount|default:"0" }}</h3>
+                    <p>Active Loans {{ loan_requests.total_count}}</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-stalker"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>{{ orders }}</h3>
+                    <p>Orders</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>{{ collections }}</h3>
+                    <p>Collections</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>{{ sms_count }}</h3>
+                    <p>SMS's</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div class="col-12">
+    <div class="row d-flex">
+        <div class="col-lg-6 col-6">
+            <div class="card">
+              <div class="card-header border-0">
+                Demographic
+              </div>
+              <div class="card-body table-responsive p-0">
+                  <table class="table table-striped table-valign-middle table-sm">
+                      <thead>
+                          <tr>
+                              <th>Demographic</th>
+                              <th>Male</th>
+                              <th>Female</th>
+                              <th>Total</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                     <tr>
+                        <td>Youth</td>
+                        <td>{{ youth_male }}</td>
+                         <td>{{ youth_female }}</td>
+                        <td>{{ youths }}</td>
+                     </tr>
+                  <tr>
+                    <td>Adults</td>
+                    <td>{{ adult_male }}</td>
+                    <td>{{ adult_female }}</td>
+                    <td>{{ adults }} </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            
+
+
+                <div class="card">
+                     <div class="card-body table-responsive p-0" style="height:300px;">
+                        <canvas id="monthlyChart"></canvas>
+                     </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body table-responsive p-0" style="height:300px;">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+        </div>
+
+<!--        Chart JS Gender-->
+        <div class="col-lg-6 col-6">
+            <div class="card card-danger">
+                <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header border-0">
+                VSLA Distribution
+              </div>
+              <div class="card-body table-responsive p-0">
+                  <table class="table table-striped table-valign-middle table-sm">
+                      <thead>
+                          <tr>
+                              <th>VSLA </th>
+                              <th>Farmers</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      {% for pd in per_clan_district %}
+                         <tr>
+                            <td>{{ pd.district__name }}</td>
+                            <td>{{ pd.total }}</td>
+                         </tr>
+                      {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header border-0">
+                District Distribution
+              </div>
+              <div class="card-body table-responsive p-0">
+                  <table class="table table-striped table-valign-middle table-sm">
+                      <thead>
+                          <tr>
+                              <th>District</th>
+                              <th>Farmers</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      {% for pd in per_clan_district %}
+                         <tr>
+                            <td>{{ pd.district__name }}</td>
+                            <td>{{ pd.total }}</td>
+                         </tr>
+                      {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extrajs %}
+<!-- ChartJS -->
+<script src="{% static 'adminlte/plugins/chart.js/Chart.min.js' %}"></script>
+<script>
+    //-------------
+    //- DONUT CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    fetch('/dashboard/gender/').then(response => response.json()).then(res => {
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+
+        var donutData = {
+            labels: res.labels,
+              datasets: [{
+                data: res.data,
+                backgroundColor: ['#00a65a', '#f56954']
+              }]
+        }
+
+        new Chart(donutChartCanvas, {
+          type: 'doughnut',
+          data: donutData,
+          options: {
+            maintainAspectRatio: false,
+            responsive: true
+          }
+        })
+  })
+
+    $.get("{% url 'bar-farmers-monthly' %}", function(response) {
+
+      var ctx = $('#monthlyChart').get(0).getContext('2d');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: response,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    });
+
+    $.get("{% url 'bar-farmers-weekly' %}", function(response) {
+
+      var ctx = $('#weeklyChart').get(0).getContext('2d');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: response,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+    });
+</script>
+{% endblock %}

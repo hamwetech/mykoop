@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n admin_urls crispy_forms_tags %}
+
+{% block breadcrumbs %}
+
+<div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+    <h1 class="h4 m-0 pr-3 mr-3 border-right"> Payment </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="">Payment</a></li>
+        <li class="breadcrumb-item active">Bulk Payment</li>
+    </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+            <div class="container mt-5">
+    <h3 class="mb-4">Bulk Payment Result</h3>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Batch ID:</strong> {{ batch.id }}</p>
+            <p><strong>Status:</strong>
+                <span class="badge bg-info">{{ batch.status }}</span>
+            </p>
+            <p><strong>Total Records:</strong> {{ batch.total_records }}</p>
+            <p><strong>Successful:</strong>
+                <span class="text-success">{{ batch.successful }}</span>
+            </p>
+            <p><strong>Failed:</strong>
+                <span class="text-danger">{{ batch.failed }}</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'bulk-upload' %}" class="btn btn-primary">
+            New Upload
+        </a>
+
+      
+    </div>
+</div>
+{% endblock %}
+{% block extrajs %}
+
+{% endblock %}

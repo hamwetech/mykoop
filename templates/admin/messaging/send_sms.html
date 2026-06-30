@@ -1,0 +1,99 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n admin_urls crispy_forms_tags %}
+
+{% block breadcrumbs %}
+
+<div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+    <h1 class="h4 m-0 pr-3 mr-3 border-right"> Messaging </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'admin:messaging_smslog_changelist' %}">SMS</a></li>
+        <li class="breadcrumb-item active">Send SMS</li>
+    </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+            <div class="col-md-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% crispy form %}
+                            <button type="submit" class="btn btn-primary">Send SMS</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+{% block extrajs %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%'
+        });
+    });
+
+    $(document).ready(function () {
+        // Hide all fields initially
+        $("#div_id_grouping").hide();
+        $("#div_id_district").hide();
+        $("#div_id_clan").hide();
+
+        // Function to toggle fields based on message_type
+        function toggleFields() {
+            let messageType = $("#id_message_type").val();
+
+            if (messageType === "farmerlist") {
+                $("#div_id_grouping").show();
+                toggleGroupingDependentFields(); // show/hide district/clan depending on grouping
+            } else {
+                $("#div_id_grouping").hide();
+                $("#div_id_district").hide();
+                $("#div_id_clan").hide();
+            }
+        }
+
+        // Show district or clan based on grouping selection
+        function toggleGroupingDependentFields() {
+            let grouping = $("#id_grouping").val();
+
+            if (grouping === "district") {
+                $("#div_id_district").show();
+                $("#div_id_clan").hide();
+            } else if (grouping === "clan") {
+                $("#div_id_clan").show();
+                $("#div_id_district").hide();
+            } else {
+                $("#div_id_district").hide();
+                $("#div_id_clan").hide();
+            }
+        }
+
+        // On page load
+        toggleFields();
+
+        // When message_type changes
+        $("#id_message_type").change(function () {
+            toggleFields();
+        });
+
+        // When grouping changes
+        $("#id_grouping").change(function () {
+            toggleGroupingDependentFields();
+        });
+    });
+
+     updateCount()
+
+    function updateCount() {
+        let msg = document.getElementById("id_message").value;
+        document.getElementById("counter").innerText = msg.length + " characters";
+    }
+
+</script>
+{% endblock %}

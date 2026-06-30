@@ -1,0 +1,168 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n admin_urls %}
+
+{% block breadcrumbs %}
+
+<div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+    <h1 class="h4 m-0 pr-3 mr-3 border-right"> Farmers </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'admin:system_farmer_changelist' %}">Farmers</a></li>
+        <li class="breadcrumb-item active">Farmer Details</li>
+    </ol>
+</div>
+
+
+
+{% endblock %}
+
+{% block content %}
+            <div class="col-md-3">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 {% if farmer.image %}
+                                    src="{{ farmer.image.url|default:'/static/dist/img/avatar5.png' }}"
+                                 {% else %}
+                                    src="/static/dist/img/avatar5.png"
+                                 {% endif %}
+                                 alt="Farmer profile picture"
+                                 style="width: 100px; height: 100px; object-fit: cover;">
+                        </div>
+
+                        <h3 class="profile-username text-center">{{ farmer.title }} {{ farmer.first_name }} {{ farmer.surname }}</h3>
+                        <p class="text-muted text-center">{{ farmer.member_id }}</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Account Balance</b> <a class="float-right text-success">UGX {{ farmer.account_balance }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Savings</b> <a class="float-right">UGX {{ farmer.savings_balance }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Status</b>
+                                <span class="float-right badge {% if farmer.is_active %}badge-success{% else %}badge-danger{% endif %}">
+                                    {% if farmer.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </li>
+                        </ul>
+                        <a href="{% url 'admin:system_farmer_change' farmer.id %}" class="btn btn-primary btn-block"><b>Edit Profile</b></a>
+                    </div>
+                </div>
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Digital Identity</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if farmer.qrcode %}
+                            <img src="{{ farmer.qrcode.url }}" class="img-fluid mb-2" style="max-width: 150px;">
+                        {% endif %}
+                        <p class="text-sm text-muted">Card: {{ farmer.card_number|default:"No Card Assigned" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#bio" data-toggle="tab">Bio & Identity</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#location" data-toggle="tab">Location & Farm</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#financial" data-toggle="tab">Financials & Digital</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="bio">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-venus-mars mr-1"></i> Gender</strong>
+                                        <p class="text-muted">{{ farmer.gender }}</p>
+                                        <hr>
+                                        <strong><i class="fas fa-id-card mr-1"></i> {{ farmer.get_id_type_display }}</strong>
+                                        <p class="text-muted">{{ farmer.id_number }}</p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-birthday-cake mr-1"></i> Date of Birth</strong>
+                                        <p class="text-muted">{{ farmer.date_of_birth }}</p>
+                                        <hr>
+                                        <strong><i class="fas fa-users mr-1"></i> Clan</strong>
+                                        <p class="text-muted">{{ farmer.clan.name }}</p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-heart mr-1"></i> Marital Status</strong>
+                                        <p class="text-muted">{{ farmer.marital_status }}</p>
+                                        <hr>
+                                        <strong><i class="fas fa-wheelchair mr-1"></i> Handicap Status</strong>
+                                        <p class="text-muted">{% if farmer.is_handicap %}Yes{% else %}No{% endif %}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="location">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-primary border-bottom pb-2">Administrative Info</h5>
+                                        <dl class="row">
+                                            <dt class="col-sm-4">District</dt><dd class="col-sm-8">{{ farmer.district }}</dd>
+                                            <dt class="col-sm-4">County</dt><dd class="col-sm-8">{{ farmer.county }}</dd>
+                                            <dt class="col-sm-4">Sub County</dt><dd class="col-sm-8">{{ farmer.sub_county }}</dd>
+                                            <dt class="col-sm-4">Village</dt><dd class="col-sm-8">{{ farmer.village }}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="text-success border-bottom pb-2">Agricultural Info</h5>
+                                        <p><strong>Acreage:</strong> {{ farmer.land_acreage }} Acres</p>
+                                        <p><strong>Crops:</strong>
+                                            {% for c in farmer.crop.all %}
+                                                <span class="badge badge-info">{{ c.name }}</span>
+                                            {% empty %}
+                                                <span class="text-muted">None</span>
+                                            {% endfor %}
+                                        </p>
+                                        <p><strong>Coordinates:</strong> <code class="text-dark">{{ farmer.gps_coordinates }}</code></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="financial">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-box bg-light">
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Primary Phone</span>
+                                                <span class="info-box-number">{{ farmer.phone_number }}</span>
+                                                <small class="{% if farmer.own_phone %}text-success{% else %}text-danger{% endif %}">
+                                                    <i class="fas fa-check-circle"></i> {% if farmer.own_phone %}Personal Phone{% else %}Borrowed/Shared{% endif %}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-box bg-light">
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Digital Services</span>
+                                                <div>
+                                                    <span class="badge {% if farmer.has_mobile_money %}badge-success{% else %}badge-secondary{% endif %}">Mobile Money</span>
+                                                    <span class="badge {% if farmer.has_flexipay %}badge-primary{% else %}badge-secondary{% endif %}">Flexipay</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Created by ID: {{ farmer.created_by }} on {{ farmer.created_at|date:"M d, Y" }}</small>
+                    </div>
+                </div>
+            </div>
+
+
+
+<a class="button" href="{% url 'admin:system_farmer_changelist' %}">Back to List</a>
+{% endblock %}

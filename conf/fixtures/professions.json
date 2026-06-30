@@ -1,0 +1,182 @@
+[
+  {
+    "model": "conf.profession",
+    "pk": 1,
+    "fields": {
+      "name": "Farmer",
+      "code": "farmer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 2,
+    "fields": {
+      "name": "Livestock Farmer",
+      "code": "livestock_farmer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 3,
+    "fields": {
+      "name": "Agricultural Extension Worker",
+      "code": "agri_extension_worker",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 4,
+    "fields": {
+      "name": "Veterinary Officer",
+      "code": "veterinary_officer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 5,
+    "fields": {
+      "name": "Doctor",
+      "code": "doctor",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 6,
+    "fields": {
+      "name": "Nurse",
+      "code": "nurse",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 7,
+    "fields": {
+      "name": "Clinical Officer",
+      "code": "clinical_officer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 8,
+    "fields": {
+      "name": "Teacher",
+      "code": "teacher",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 9,
+    "fields": {
+      "name": "Business Owner",
+      "code": "business_owner",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 10,
+    "fields": {
+      "name": "Accountant",
+      "code": "accountant",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 11,
+    "fields": {
+      "name": "Software Developer",
+      "code": "software_developer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 12,
+    "fields": {
+      "name": "Driver",
+      "code": "driver",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 13,
+    "fields": {
+      "name": "Boda Boda Rider",
+      "code": "boda_boda_rider",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 14,
+    "fields": {
+      "name": "Police Officer",
+      "code": "police_officer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 15,
+    "fields": {
+      "name": "Soldier",
+      "code": "soldier",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 16,
+    "fields": {
+      "name": "Student",
+      "code": "student",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 17,
+    "fields": {
+      "name": "Unemployed",
+      "code": "unemployed",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "conf.profession",
+    "pk": 18,
+    "fields": {
+      "name": "Casual Labourer",
+      "code": "casual_labourer",
+      "create_date": "2026-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z"
+    }
+  }
+]

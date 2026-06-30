@@ -1,0 +1,263 @@
+{% load i18n static jazzmin admin_urls %}
+
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column {{ jazzmin_ui.sidebar_list_classes }}" data-widget="treeview" role="menu" data-collapsible="false">
+        <li class="nav-item">
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="nav-icon fas fa-th-large"></i>
+                <p>{% trans 'Dashboard' %}</p>
+            </a>
+        </li>
+        {% if perms.system.view_cooperative %}
+        <li class="nav-item">
+            <a href="{% url 'admin:system_cooperative_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>{% trans 'Cooperative' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.system.view_farmergroup %}
+        <li class="nav-item">
+            <a href="{% url 'admin:system_farmergroup_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-people-group"></i>
+                <p>{% trans 'VSLA' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.system.view_clan %}
+        <!-- <li class="nav-item">
+            <a href="{% url 'admin:system_clan_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-house"></i>
+                <p>{% trans 'Clan' %}</p>
+            </a>
+        </li> -->
+        {% endif %}
+        {% if perms.system.view_farmer %}
+        <li class="nav-item">
+            <a href="{% url 'admin:system_farmer_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>{% trans 'Farmer' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.system.view_collection %}
+        <li class="nav-item">
+            <a href="{% url 'admin:system_collection_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-box-open"></i>
+                <p>{% trans 'Collection' %}</p>
+            </a>
+        </li>
+        {% endif %}
+         {% if perms.sales.view_order %}
+        <li class="nav-item">
+            <a href="{% url 'admin:sales_order_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-cart-shopping"></i>
+                <p>{% trans 'Order' %}</p>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if perms.activity.view_thematicarea %}
+        <li class="nav-header">FINANCE</li>
+        <li class="nav-item">
+            <a href="{% url 'admin:finance_savingstransaction_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Savings' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:finance_sharepurchase_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Shares' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:finance_socialfund_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Social Fund' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:finance_loan_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Loan Requests' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:finance_loanrepayment_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Loan Repayment' %}</p>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if perms.activity.view_thematicarea %}
+        <li class="nav-header">TRAINING</li>
+        {% if perms.activity.view_thematicarea %}
+        <li class="nav-item">
+            <a href="{% url 'admin:activity_thematicarea_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Thematic Area' %}</p>
+            </a>
+        </li>
+        {% endif %}
+         {% if perms.activity.view_trainingsession %}
+        <li class="nav-item">
+            <a href="{% url 'admin:activity_trainingsession_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-chalkboard-user"></i>
+                <p>{% trans 'Training Session' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% endif %}
+
+        {% if perms.messaging.view_smslog %}
+        <li class="nav-header">MESSAGING</li>
+
+        <li class="nav-item">
+            <a href="{% url 'admin:messaging_smslog_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-message"></i>
+                <p>{% trans 'SMS' %}</p>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if perms.sales.view_item %}
+        <li class="nav-header">SALES MANAGEMENT</li>
+        {% if perms.sales.view_supplier %}
+        <li class="nav-item">
+            <a href="{% url 'admin:sales_supplier_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-store"></i>
+                <p>{% trans 'Supplier' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.sales.view_category %}
+        <li class="nav-item">
+            <a href="{% url 'admin:sales_category_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>{% trans 'Categories' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.sales.view_item %}
+        <li class="nav-item">
+            <a href="{% url 'admin:sales_item_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-tag"></i>
+                <p>{% trans 'Item' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% endif %}
+
+
+        {% if perms.conf.view_crop or perms.conf.view_district  %}
+        <li class="nav-header">LOCATION AND FARMING</li>
+
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_crop_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-seedling"></i>
+                <p>{% trans 'Crops' %}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_district_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-location-dot"></i>
+                <p>{% trans 'District' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_county_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-location-dot"></i>
+                <p>{% trans 'County' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_subcounty_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-location-dot"></i>
+                <p>{% trans 'Sub County' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_parish_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-location-dot"></i>
+                <p>{% trans 'Parish' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:conf_village_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-location-crosshairs"></i>
+                <p>{% trans 'Village' %}</p>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if request.user.is_superuser%}
+        <li class="nav-header">USER MANAGEMENT</li>
+        <li class="nav-item">
+            <a href="{% url 'admin:auth_user_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>{% trans 'User' %}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'admin:auth_group_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>{% trans 'Access Control' %}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'admin:app_list' app_label='conf' %}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>{% trans 'Configs' %}</p>
+            </a>
+        </li>
+        {% endif %}
+
+
+
+
+
+
+<!--                            {% if jazzmin_settings.navigation_expanded %}-->
+<!--                                {% for app in side_menu_list %}-->
+<!--                                    <li class="nav-header">{{ app.name }}</li>-->
+<!--                                    {% for model in app.models %}-->
+<!--                                        <li class="nav-item">-->
+<!--                                            {% if model.url %}-->
+<!--                                            <a href="{{ model.url }}" class="nav-link">-->
+<!--                                                <i class="nav-icon {{ model.icon }}"></i> <p>{{ model.name }}</p>-->
+<!--                                            </a>-->
+<!--                                        {% else %}-->
+<!--                                            <span class="nav-link disabled">-->
+<!--                                                <i class="nav-icon {{ model.icon }}"></i> <p>{{ model.name }}</p>-->
+<!--                                            </span>-->
+<!--                                        {% endif %}-->
+<!--                                        </li>-->
+<!--                                    {% endfor %}-->
+<!--                                {% endfor %}-->
+<!--                            {% else %}-->
+<!--                                {% for app in side_menu_list %}-->
+<!--                                    <li class="nav-item has-treeview">-->
+<!--                                        <a href="#" class="nav-link">-->
+<!--                                            <i class="nav-icon {{ app.icon }}"></i>-->
+<!--                                            <p>{{ app.name|truncatechars:21 }} <i class="fas fa-angle-left right"></i></p>-->
+<!--                                        </a>-->
+<!--                                        <ul class="nav nav-treeview" style="display: none;">-->
+<!--                                            {% for model in app.models %}-->
+<!--                                                <li class="nav-item">-->
+<!--                                                    <a href="{% if model.url %}{{ model.url }}{% else %}javascript:void(0){% endif %}" class="nav-link">-->
+<!--                                                        <i class="nav-icon {{ model.icon }}"></i>-->
+<!--                                                        <p>{{ model.name }}</p>-->
+<!--                                                    </a>-->
+<!--                                                </li>-->
+<!--                                            {% endfor %}-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                {% endfor %}-->
+<!--                            {% endif %}-->
+    </ul>
+</nav>

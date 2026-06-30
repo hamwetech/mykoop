@@ -1,0 +1,11 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+
+        <a href="{% url 'admin:finance_socialfundcontribution_changelist' %}" class="button"
+           style="background:#28a745;color:white;padding:6px 10px;border-radius:4px;">
+            <i class="fa fa-layer-group"></i> Add Contribution
+        </a>
+
+{% endblock %}

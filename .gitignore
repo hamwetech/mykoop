@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+local_settings.py
+local.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media & static (generated files)
+media/
+staticfiles/
+
+# Environment variables
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.log
+
+# Migrations (optional - be careful)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Node (if using frontend)
+node_modules/
+dist/
+build/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Gunicorn
+gunicorn.pid
+
+# Celery
+celerybeat-schedule
+
+# PyCharm
+*.iml
+
+# VS Code
+.history/
+
+# Backup files
+*.bak
+*.swp

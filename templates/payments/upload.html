@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n admin_urls crispy_forms_tags %}
+
+{% block breadcrumbs %}
+
+<div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+    <h1 class="h4 m-0 pr-3 mr-3 border-right"> Payment </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="">Payment</a></li>
+        <li class="breadcrumb-item active">Bulk Payment</li>
+    </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+            <div class="col-md-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% crispy form %}
+                            <button type="submit" class="btn btn-primary">Initiate Payment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+{% block extrajs %}
+
+{% endblock %}
