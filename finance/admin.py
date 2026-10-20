@@ -2,17 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from finance.models import (
-    SharePurchase,
-    SavingsTransaction,
-    Loan,
-    LoanRepayment,
-    SocialFund,
-    SocialFundContribution,
-    Fine,
-    CashBook,
-    ShareOut
-)
+from finance.models import *
 
 from finance.forms import LoanAdminForm
 
@@ -43,6 +33,85 @@ class SavingsTransactionAdmin(admin.ModelAdmin):
 class LoanRepaymentInline(admin.TabularInline):
     model = LoanRepayment
     extra = 0
+
+
+@admin.register(CreditManager)
+class CreditManagerAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'registration_number',
+        'contact_person',
+        'phone_number',
+        'email',
+        'interest_rate',
+        'status',
+        'created_at',
+    )
+
+    list_filter = (
+        'status',
+        'interest_rate',
+        'created_at',
+    )
+
+    search_fields = (
+        'name',
+        'registration_number',
+        'tax_identification_number',
+        'contact_person',
+        'phone_number',
+        'email',
+    )
+
+    list_editable = (
+        'interest_rate',
+        'status',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+
+    fieldsets = (
+        ('Company Information', {
+            'fields': (
+                'name',
+                'registration_number',
+                'tax_identification_number',
+                'status',
+            )
+        }),
+        ('Contact Information', {
+            'fields': (
+                'contact_person',
+                'phone_number',
+                'email',
+                'address',
+            )
+        }),
+        ('Loan Terms', {
+            'fields': (
+                'interest_rate',
+            )
+        }),
+        ('Additional Information', {
+            'fields': (
+                'remarks',
+            )
+        }),
+        ('System Information', {
+            'fields': (
+                'created_at',
+                'updated_at',
+            ),
+            'classes': ('collapse',),
+        }),
+    )
+
+    ordering = ('name',)
+    list_per_page = 25
 
 
 @admin.register(Loan)

@@ -73,6 +73,34 @@ class SavingsTransaction(TimeStampMixin):
         return f"{self.farmer} - {self.amount}"
 
 
+class CreditManager(TimeStampMixin):
+    STATUS = (
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Suspended', 'Suspended'),
+    )
+
+    name = models.CharField(max_length=255)
+    registration_number = models.CharField(max_length=100, blank=True, null=True)
+    tax_identification_number = models.CharField(max_length=100, blank=True, null=True)
+    contact_person = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=30)
+    email = models.EmailField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+    status = models.CharField(max_length=20, choices=STATUS, default='Active')
+    remarks = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'credit_manager'
+        verbose_name = 'Credit Manager'
+        verbose_name_plural = 'Credit Managers'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class LoanManager(models.Manager):
 
     def create_loan(self, farmer, **kwargs):
@@ -103,6 +131,13 @@ class Loan(TimeStampMixin):
         on_delete=models.CASCADE
     )
     farmer_group = models.ForeignKey(FarmerGroup, verbose_name="VSLA", on_delete=models.CASCADE, null=True, blank=True)
+    credit_manager = models.ForeignKey(
+        CreditManager,
+        on_delete=models.PROTECT,
+        related_name='loans',
+        null=True,
+        blank=True
+    )
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     interest_rate = models.DecimalField(
         max_digits=5,

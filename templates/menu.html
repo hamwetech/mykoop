@@ -79,6 +79,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{% url 'admin:finance_creditmanager_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>{% trans 'Credit Manager' %}</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{% url 'admin:finance_loan_changelist' %}" class="nav-link">
                 <i class="nav-icon fas fa-file-invoice"></i>
                 <p>{% trans 'Loan Requests' %}</p>
