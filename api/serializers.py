@@ -11,9 +11,12 @@ from system.models import (
     Cooperative,
     FarmerGroup,
     Farmer,
-    Collection
+    Collection,
+    Meeting,
+    Attendance
 )
 from sales.models import *
+from finance.models import *
 
 
 class LoginSerializer(serializers.Serializer):
@@ -277,6 +280,7 @@ class ExternalTrainerSerializer(serializers.ModelSerializer):
 
 
 class FarmerSerializer(serializers.ModelSerializer):
+    
     # crop = serializers.CharField(required=False, allow_blank=True)
     crop = serializers.SerializerMethodField()
     # Map Android _id fields to actual objects
@@ -369,3 +373,176 @@ class FarmerSerializer(serializers.ModelSerializer):
             crops = Crop.objects.filter(name__in=crop_names)
             instance.crop.set(crops)
         return instance
+    
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    farmer_name = serializers.CharField(source="farmer.name", read_only=True)
+
+    class Meta:
+        model = Attendance
+        fields = [
+            "id",
+            "meeting",
+            "farmer",
+            "farmer_name",
+            "status",
+            "present",
+            "remarks",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class MeetingSerializer(serializers.ModelSerializer):
+    chaired_by_name = serializers.CharField(source="chaired_by.name", read_only=True)
+    secretary_name = serializers.CharField(source="secretary.name", read_only=True)
+    attendance = AttendanceSerializer(
+        source="attendance_set",
+        many=True,
+        read_only=True
+    )
+
+    total_attendees = serializers.SerializerMethodField()
+    total_present = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Meeting
+        fields = [
+            "id",
+            "meeting_date",
+            "meeting_number",
+            "venue",
+            "chaired_by",
+            "chaired_by_name",
+            "secretary",
+            "secretary_name",
+            "agenda",
+            "minutes",
+            "status",
+            "notes",
+            "total_attendees",
+            "total_present",
+            "attendance",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_total_attendees(self, obj):
+        return obj.attendance_set.count()
+
+    def get_total_present(self, obj):
+        return obj.attendance_set.filter(status="Present").count()
+
+
+class SocialFundContributionSerializer(serializers.ModelSerializer):
+    farmer_name = serializers.CharField(source='farmer.name', read_only=True)
+    social_fund_name = serializers.CharField(source='social_fund.name', read_only=True)
+
+    class Meta:
+        model = SocialFundContribution
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class SocialFundSerializer(serializers.ModelSerializer):
+    farmer_group_name = serializers.CharField(source='farmer_group.name', read_only=True)
+    total_contributions = serializers.IntegerField(read_only=True)
+    amount_contributed = serializers.DecimalField(max_digits=32, decimal_places=2, read_only=True)
+
+    class Meta:
+        model = SocialFund
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class SavingsTransactionSerializer(serializers.ModelSerializer):
+    farmer_name = serializers.CharField(source='farmer.name', read_only=True)
+
+    class Meta:
+        model = SavingsTransaction
+        fields = '__all__'
+        read_only_fields = ('id', 'amount_after', 'created_at', 'updated_at')
+
+
+class LoanSerializer(serializers.ModelSerializer):
+    farmer_name = serializers.CharField(source='farmer.name', read_only=True)
+    farmer_group_name = serializers.CharField(source='farmer_group.name', read_only=True)
+    approved_by_name = serializers.CharField(source='approved_by.username', read_only=True)
+
+    class Meta:
+        model = Loan
+        fields = '__all__'
+        read_only_fields = (
+            'id',
+            'balance',
+            'total_repaid',
+            'approved_by',
+            'created_at',
+            'updated_at',
+        )
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Loan amount must be greater than zero.")
+        return value
+
+    def validate(self, attrs):
+        issue_date = attrs.get('issue_date')
+        due_date = attrs.get('due_date')
+
+        if issue_date and due_date and due_date < issue_date:
+            raise serializers.ValidationError({
+                'due_date': 'Due date cannot be earlier than the issue date.'
+            })
+
+        return attrs
+
+
+class LoanRepaymentSerializer(serializers.ModelSerializer):
+    farmer_name = serializers.CharField(source='loan.farmer.name', read_only=True)
+    loan_amount = serializers.DecimalField(
+        source='loan.amount',
+        max_digits=12,
+        decimal_places=2,
+        read_only=True
+    )
+    total_paid = serializers.DecimalField(
+        max_digits=13,
+        decimal_places=2,
+        read_only=True
+    )
+    received_by_name = serializers.CharField(
+        source='received_by.username',
+        read_only=True
+    )
+
+    class Meta:
+        model = LoanRepayment
+        fields = '__all__'
+        read_only_fields = (
+            'id',
+            'received_by',
+            'created_at',
+            'updated_at',
+        )
+
+    def validate(self, attrs):
+        principal_paid = attrs.get('principal_paid', 0)
+        interest_paid = attrs.get('interest_paid', 0)
+
+        if principal_paid < 0:
+            raise serializers.ValidationError({
+                'principal_paid': 'Principal paid cannot be negative.'
+            })
+
+        if interest_paid < 0:
+            raise serializers.ValidationError({
+                'interest_paid': 'Interest paid cannot be negative.'
+            })
+
+        if principal_paid + interest_paid <= 0:
+            raise serializers.ValidationError(
+                'Total repayment must be greater than zero.'
+            )
+
+        return attrs

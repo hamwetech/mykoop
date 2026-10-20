@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from system.models import Collection
 from system.models.application import DeviceHeartBeat
 from .forms import FarmerAdminForm
-from .models import Farmer, Clan, Cooperative, FarmerGroup, AppVersion
+from .models import Farmer, Clan, Cooperative, FarmerGroup, AppVersion, Attendance, Meeting
 
 
 @admin.register(Farmer)
@@ -197,3 +197,205 @@ class AppVersionAdmin(admin.ModelAdmin):
 @admin.register(DeviceHeartBeat)
 class AppVersionAdmin(admin.ModelAdmin):
     list_display = ("device", "entry_date", "gps_coodinates")
+
+
+class AttendanceInline(admin.TabularInline):
+    model = Attendance
+    extra = 1
+    fields = (
+        "farmer",
+        "status",
+        "present",
+        "remarks",
+    )
+
+
+# @admin.register(Meeting)
+# class MeetingAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "meeting_number",
+#         "meeting_date",
+#         "venue",
+#         "chaired_by",
+#         "secretary",
+#         "status",
+#     )
+
+#     list_filter = (
+#         "status",
+#         "meeting_date",
+#     )
+
+#     search_fields = (
+#         "meeting_number",
+#         "venue",
+#         "chaired_by__name",
+#         "secretary__name",
+#     )
+
+#     inlines = [
+#         AttendanceInline,
+#     ]
+
+#     date_hierarchy = "meeting_date"
+
+
+# @admin.register(Attendance)
+# class AttendanceAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "meeting",
+#         "farmer",
+#         "status",
+#         "present",
+#         "created_at",
+#     )
+
+#     list_filter = (
+#         "status",
+#         "present",
+#         "meeting",
+#     )
+
+#     search_fields = (
+#         "farmer__name",
+#         "meeting__meeting_number",
+#     )
+
+
+class AttendanceInline(admin.TabularInline):
+    model = Attendance
+    extra = 0
+    autocomplete_fields = ["farmer"]
+    fields = ("farmer", "status", "present", "remarks")
+
+
+@admin.register(Meeting)
+class MeetingAdmin(admin.ModelAdmin):
+    list_display = (
+        "meeting_number",
+        "meeting_date",
+        "venue",
+        "chaired_by",
+        "secretary",
+        "status",
+        "attendance_count",
+    )
+
+    list_filter = (
+        "status",
+        "meeting_date",
+        "chaired_by",
+    )
+
+    search_fields = (
+        "meeting_number",
+        "venue",
+        "chaired_by__name",
+        "secretary__name",
+        "agenda",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    date_hierarchy = "meeting_date"
+
+    ordering = ("-meeting_date", "-meeting_number")
+
+    autocomplete_fields = (
+        "chaired_by",
+        "secretary",
+    )
+
+    inlines = [AttendanceInline]
+
+    fieldsets = (
+        (
+            "Meeting Details",
+            {
+                "fields": (
+                    "meeting_number",
+                    "meeting_date",
+                    "venue",
+                    "status",
+                )
+            },
+        ),
+        (
+            "Leadership",
+            {
+                "fields": (
+                    "chaired_by",
+                    "secretary",
+                )
+            },
+        ),
+        (
+            "Documentation",
+            {
+                "fields": (
+                    "agenda",
+                    "minutes",
+                    "notes",
+                )
+            },
+        ),
+        (
+            "Audit",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "created_at",
+                    "updated_at",
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description="Attendance")
+    def attendance_count(self, obj):
+        present = obj.attendance_set.filter(status="Present").count()
+        total = obj.attendance_set.count()
+        return f"{present}/{total}"
+
+
+@admin.register(Attendance)
+class AttendanceAdmin(admin.ModelAdmin):
+    list_display = (
+        "meeting",
+        "farmer",
+        "status",
+        "present",
+        "remarks",
+    )
+
+    list_filter = (
+        "status",
+        "present",
+        "meeting__meeting_date",
+    )
+
+    search_fields = (
+        "farmer__name",
+        "meeting__meeting_number",
+        "remarks",
+    )
+
+    autocomplete_fields = (
+        "meeting",
+        "farmer",
+    )
+
+    ordering = (
+        "-meeting__meeting_date",
+        "farmer__name",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+

@@ -1,7 +1,9 @@
 from django.db import models, transaction
+from django.db.models import Sum
 from django.contrib.auth.models import User
 from system.models.farmer import Farmer, FarmerGroup
 from system.models.modelmixin import TimeStampMixin
+
 
 
 class SharePurchase(TimeStampMixin):
@@ -218,12 +220,27 @@ class SocialFund(TimeStampMixin):
         verbose_name = 'Social Fund'
         verbose_name_plural = 'Social Funds'
 
+    def __str__(self):
+        return self.name
+    
+    @property
+    def total_contributions(self):
+        contibution = SocialFundContribution.objects.filter(social_fund=self)
+        return contibution.count()
+
+    @property
+    def amount_contributed(self):
+        contibution = SocialFundContribution.objects.filter(social_fund=self).aggregate(total_sum=Sum('amount'))['total_sum'] or 0
+        return contibution
+
 
 class SocialFundContribution(TimeStampMixin):
     farmer = models.ForeignKey(
         Farmer,
         on_delete=models.CASCADE
     )
+    name = models.CharField(max_length=255, null=True, blank=True)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
     social_fund = models.ForeignKey(
         SocialFund,
         on_delete=models.CASCADE

@@ -67,25 +67,26 @@
         </li>
         <li class="nav-item">
             <a href="{% url 'admin:finance_sharepurchase_changelist' %}" class="nav-link">
-                <i class="nav-icon fas fa-book-open-reader"></i>
+                
+                <i class="nav-icon fas fa-coins"></i>
                 <p>{% trans 'Shares' %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'admin:finance_socialfund_changelist' %}" class="nav-link">
-                <i class="nav-icon fas fa-book-open-reader"></i>
+                <i class="nav-icon fas fa-hand-holding-usd"></i>
                 <p>{% trans 'Social Fund' %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'admin:finance_loan_changelist' %}" class="nav-link">
-                <i class="nav-icon fas fa-book-open-reader"></i>
+                <i class="nav-icon fas fa-file-invoice"></i>
                 <p>{% trans 'Loan Requests' %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'admin:finance_loanrepayment_changelist' %}" class="nav-link">
-                <i class="nav-icon fas fa-book-open-reader"></i>
+                <i class="nav-icon fas fa-money-bill-wave"></i>
                 <p>{% trans 'Loan Repayment' %}</p>
             </a>
         </li>
@@ -106,6 +107,14 @@
             <a href="{% url 'admin:activity_trainingsession_changelist' %}" class="nav-link">
                 <i class="nav-icon fas fa-chalkboard-user"></i>
                 <p>{% trans 'Training Session' %}</p>
+            </a>
+        </li>
+        {% endif %}
+        {% if perms.activity.view_meeting %}
+        <li class="nav-item">
+            <a href="{% url 'admin:system_meeting_changelist' %}" class="nav-link">
+                <i class="nav-icon fas fa-book-open-reader"></i>
+                <p>{% trans 'Meeting' %}</p>
             </a>
         </li>
         {% endif %}

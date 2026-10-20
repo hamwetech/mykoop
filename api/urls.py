@@ -47,6 +47,13 @@ router.register(r'thematic-areas', ThematicAreaViewSet, basename='thematic-area'
 router.register(r'training-session', TrainingSessionViewSet, basename='training-session')
 router.register(r'training-attendance', TrainingAttendanceViewSet, basename='training-attendance')
 router.register(r'external-trainer', ExternalTrainerViewSet, basename='external-trainer')
+router.register(r'meetings', MeetingViewSet, basename='meeting')
+router.register(r'attendance', AttendanceViewSet, basename='attendance')
+router.register(r'social-funds', SocialFundViewSet, basename='social-funds')
+router.register(r'social-fund-contributions', SocialFundContributionViewSet, basename='social-fund-contributions')
+router.register(r'savings-transactions', SavingsTransactionViewSet, basename='savings-transaction')
+router.register(r'loans', LoanViewSet, basename='loan')
+router.register(r'loan-repayments', LoanRepaymentViewSet, basename='loan-repayment')
 
 urlpatterns = [
    path('authenticate/', AuthenticationView.as_view(), name="authenticate"),
@@ -59,6 +66,7 @@ urlpatterns = [
    path("app/download/<int:version_code>/", download_apk),
    path("check-token/", CheckTokenView.as_view(), name="check_token"),
    path("heartbeat/", HeartBeatAPIView.as_view(), name="heartbeat"),
+   
 
     # path('redoc/', TemplateView.as_view(
     #         template_name='api/redoc.html',

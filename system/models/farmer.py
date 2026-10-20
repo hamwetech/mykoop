@@ -212,22 +212,51 @@ class Collection(TimeStampMixin):
 
 
 class Meeting(TimeStampMixin):
+    STATUS = (
+        ("Planned", "Planned"),
+        ("Ongoing", "Ongoing"),
+        ("Completed", "Completed"),
+        ("Cancelled", "Cancelled"),
+    )
+
     meeting_date = models.DateField()
     meeting_number = models.PositiveIntegerField()
     venue = models.CharField(max_length=200)
-    notes = models.TextField(blank=True)
     chaired_by = models.ForeignKey(
         Farmer,
         on_delete=models.SET_NULL,
         null=True,
         related_name="chaired_meetings"
     )
+    secretary = models.ForeignKey(
+        Farmer,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="recorded_meetings"
+    )
+
+    agenda = models.TextField(blank=True)
+    minutes = models.TextField(blank=True)
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS,
+        default="Planned"
+    )
+    notes = models.TextField(blank=True)
 
     def __str__(self):
         return f"Meeting {self.meeting_number}"
 
 
 class Attendance(TimeStampMixin):
+    STATUS = (
+        ("Present", "Present"),
+        ("Absent", "Absent"),
+        ("Excused", "Excused"),
+        ("Late", "Late"),
+    )
     meeting = models.ForeignKey(
         Meeting,
         on_delete=models.CASCADE
@@ -235,6 +264,11 @@ class Attendance(TimeStampMixin):
     farmer = models.ForeignKey(
         Farmer,
         on_delete=models.CASCADE
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS,
+        default="Present"
     )
     present = models.BooleanField(default=True)
     remarks = models.CharField(max_length=255, blank=True)

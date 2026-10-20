@@ -89,15 +89,15 @@ class LoanRepaymentAdmin(admin.ModelAdmin):
 # -----------------------
 @admin.register(SocialFund)
 class SocialFundAdmin(admin.ModelAdmin):
-    list_display = ("name", "farmer_group", "status", "target_amount", "start_date", "end_date", "open_button")
-    list_filter = ("status", "farmer_group")
+    list_display = ("name", "farmer_group", "status", "target_amount", "amount_contributed", "start_date", "end_date", "open_button")
+    list_filter = ("status", "farmer_group", "name")
     search_fields = ("name",)
 
     def open_button(self, obj):
         url = reverse(
-            "finance:loan-detail",
-            args=[obj.id]
+            "admin:finance_socialfundcontribution_changelist"
         )
+        url = "{}?social_fund={}".format(url, obj.id)
         return format_html(
             '<a class="btn btn-success" style="background:#007bff;color:white;" href="{}">OPEN</a>',
             url
@@ -105,11 +105,19 @@ class SocialFundAdmin(admin.ModelAdmin):
 
     open_button.short_description = "Action"
 
+    def amount_contributed(self, obj):
+        return obj.amount_contributed
+
+    amount_contributed.short_description = "Amount Contributed"
+
+    def get_queryset(self, request):
+        return super().get_queryset(request)
+
 
 @admin.register(SocialFundContribution)
 class SocialFundContributionAdmin(admin.ModelAdmin):
     list_display = ("farmer", "social_fund", "amount", "created_at")
-    list_filter = ("social_fund",)
+    list_filter = ('social_fund', 'farmer')
 
 
 # -----------------------

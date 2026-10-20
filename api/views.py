@@ -645,3 +645,100 @@ class HeartBeatAPIView(APIView):
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    
+class MeetingViewSet(viewsets.ModelViewSet):
+    queryset = (
+        Meeting.objects
+        .select_related(
+            "chaired_by",
+            "secretary"
+        )
+        .prefetch_related("attendance_set")
+        .all()
+    )
+
+    serializer_class = MeetingSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+
+class AttendanceViewSet(viewsets.ModelViewSet):
+    queryset = (
+        Attendance.objects
+        .select_related(
+            "meeting",
+            "farmer"
+        )
+        .all()
+    )
+
+    serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class SocialFundViewSet(viewsets.ModelViewSet):
+    queryset = SocialFund.objects.all().order_by('-id')
+    serializer_class = SocialFundSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+
+class SocialFundContributionViewSet(viewsets.ModelViewSet):
+    queryset = SocialFundContribution.objects.select_related(
+        'farmer', 'social_fund'
+    ).all().order_by('-id')
+    serializer_class = SocialFundContributionSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+
+class SavingsTransactionViewSet(viewsets.ModelViewSet):
+    serializer_class = SavingsTransactionSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+    queryset = SavingsTransaction.objects.select_related('farmer').all().order_by('-id')
+
+
+class LoanViewSet(viewsets.ModelViewSet):
+    serializer_class = LoanSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+    queryset = Loan.objects.select_related(
+        'farmer', 'farmer_group', 'approved_by'
+    ).all().order_by('-id')
+
+    def perform_create(self, serializer):
+        farmer = serializer.validated_data['farmer']
+
+        with transaction.atomic():
+            Loan.objects.select_for_update().filter(farmer=farmer)
+
+            active = Loan.objects.filter(
+                farmer=farmer
+            ).exclude(
+                status__in=['Completed', 'Rejected']
+            ).exists()
+
+            if active:
+                from rest_framework.exceptions import ValidationError
+                raise ValidationError({
+                    'farmer': 'This farmer already has an active loan.'
+                })
+
+            serializer.save()
+
+
+class LoanRepaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = LoanRepaymentSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+    queryset = LoanRepayment.objects.select_related(
+        'loan', 'loan__farmer', 'received_by'
+    ).all().order_by('-id')
+
+    def perform_create(self, serializer):
+        serializer.save(received_by=self.request.user)
